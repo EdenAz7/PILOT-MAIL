@@ -36,6 +36,7 @@ firebase.initializeApp(firebaseConfig);
 const app = firebase.app();  // App instance
 const analytics = firebase.analytics();  // Analytics instance
 
+
 document.getElementById('quiz-container').addEventListener('submit', async function (event) {
   event.preventDefault();
   const fullName = document.getElementById('fullName').value;
@@ -79,5 +80,3 @@ document.getElementById('quiz-container').addEventListener('submit', async funct
     }, 3000);
   }
 });
-
-// ... (rest of your existing code remains the same)
