@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="LOGO-VIZIT.png" type="image/x-icon" style="border-radius: 100%;">
+  <title>Enquête Vizit demenagement</title>
+</head>
+
+<body>
+ 
+  <form id="quiz-container" action="https://formsubmit.co/bettendavid7@gmail.com" method="POST">
+
+    <h1 id="header">Enquête sur nos services <br> <img src="LOGO-VIZIT.png" alt="" width="200px"> </h1>
+    <button id="loginButton">🌟</button><label for="fullName">Nom complet:</label>
+    <input type="text" id="fullName" name="fullName" required> <br>
+    <h3>Sur une échelle de 1 (Mauvais) à 5 (Parfait)</h3>
+    <br>
+    <div class="question">
+      <p>1. Étiez-vous satisfait du processus de planification de votre déménagement?</p>
+      <div class="rating" data-question="1"></div>
+    </div>
+
+    <div class="question">
+      <p>2. À quel point notre personnel était-il courtois et professionnel pendant toute la durée du service ?</p>
+      <div class="rating" data-question="2"></div>
+    </div>
+
+    <div class="question">
+      <p>3. À quel point avez-vous trouvé que notre équipe a pris des précautions spécifiques pour protéger et manipuler
+        vos biens fragiles pendant le processus de déménagement ?</p>
+      <div class="rating" data-question="3"></div>
+    </div>
+
+    <div class="question">
+      <p>4. Comment évalueriez-vous la communication avec notre entreprise, y compris la clarté des informations
+        fournies avant et pendant le déménagement ?</p>
+      <div class="rating" data-question="4"></div>
+    </div>
+
+    <div class="question">
+      <p>5. Dans l'ensemble, à quel point êtes-vous satisfait(e) de la qualité globale des services de déménagement que
+        vous avez reçus de notre part ?</p>
+      <div class="rating" data-question="5"></div>
+    </div>
+
+    <input type="submit" value="Page suivante">
+  </form>
+  
+
+
+  <div id="goodModal" class="goodModal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <h3>Nous vous remercions de votre collaboration</h3>
+      <p>Nous serions ravis que vous nous donniez votre avis sur la page qui s'ouvre maintenant.</p>
+    </div>
+
+  </div>
+
+  <div id="badModal" class="badModal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <p>
+      <h4>Nous vous remercions sincèrement de votre coopération.</h4> <br>
+      nous avons pris en considération votre avis et l'avons communiqué à notre équipe technique.</p>
+    </div>
+
+  </div>
+  <script src="https://smtpjs.com/v3/smtp.js">
+  </script>
+</body>
+<script src="main.js"></script>
+
+</html>
