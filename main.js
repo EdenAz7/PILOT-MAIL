@@ -22,15 +22,7 @@ function rateQuestion(rating, value) {
 const customerDetails = JSON.parse(localStorage.getItem('customerDetails')) || [];
 
 document.getElementById('quiz-container').addEventListener('submit', function (event) {
-  Email.send({
-    Host : "smtp.elasticemail.com",
-    Username : "bettendavid7@gmail.com",
-    Password : "E6A01105FC2BF015BDC02F0C00200B5BED95",
-    To : 'bettendavid7@gmail.com',
-    From : "bettendavid7@gmail.com",
-    Subject : "enquete",
-    Body : "And this is the body"
-});
+
   event.preventDefault();
   const fullName = document.getElementById('fullName').value;
   const values = Array.from(ratings).map(rating => {
