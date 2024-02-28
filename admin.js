@@ -11,25 +11,29 @@ if (!Array.isArray(customerDetails)) {
 // Display customer details on the admin page
 const customerList = document.getElementById('customerList');
 
-if (customerDetails.length === 0) {
-  console.log('No customer details found.');
-} else {
-  customerDetails.forEach((customer, index) => {
+// Fetch customer details from Firebase Firestore
+db.collection("customerDetails").get().then((querySnapshot) => {
+  querySnapshot.forEach((doc) => {
+    const customer = doc.data();
     const listItem = document.createElement('li');
-    listItem.innerHTML = `Customer: ${customer.fullName}, Average Rating: ${customer.averageRating}, Submitted: ${customer.submissionTime}
-                          <button onclick="deleteCustomer(${index})">Delete</button>`;
+    listItem.innerHTML = `
+      Customer: ${customer.fullName}, 
+      Average Rating: ${customer.averageRating}, 
+      Submitted: ${customer.submissionTime}
+      <button onclick="deleteCustomer('${doc.id}')">Delete</button>`;
     customerList.appendChild(listItem);
   });
-}
+});
 
 // Function to delete a customer entry
-function deleteCustomer(index) {
-  // Remove the customer entry at the specified index
-  customerDetails.splice(index, 1);
-  // Update localStorage with the modified customerDetails array
-  localStorage.setItem('customerDetails', JSON.stringify(customerDetails));
-  // Reload the page to reflect the changes in the list
-  location.reload();
+function deleteCustomer(docId) {
+  // Remove the customer entry from Firebase Firestore
+  db.collection("customerDetails").doc(docId).delete().then(() => {
+    // Reload the page to reflect the changes in the list
+    location.reload();
+  }).catch((error) => {
+    console.error("Error deleting document: ", error);
+  });
 }
 
 // Function to navigate to the home page

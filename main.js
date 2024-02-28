@@ -19,62 +19,65 @@ function rateQuestion(rating, value) {
   });
 }
 
-const customerDetails = JSON.parse(localStorage.getItem('customerDetails')) || [];
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDno2DbwkSYnpHJKN7WHbTQv9pGIk0bQok",
+  authDomain: "data-vizit.firebaseapp.com",
+  projectId: "data-vizit",
+  storageBucket: "data-vizit.appspot.com",
+  messagingSenderId: "340567121801",
+  appId: "1:340567121801:web:b22cc202f66f12db044b58",
+  measurementId: "G-PGW4QV6BVH"
+};
 
-document.getElementById('quiz-container').addEventListener('submit', function (event) {
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
+const app = firebase.app();  // App instance
+const analytics = firebase.analytics();  // Analytics instance
+
+document.getElementById('quiz-container').addEventListener('submit', async function (event) {
   event.preventDefault();
   const fullName = document.getElementById('fullName').value;
   const values = Array.from(ratings).map(rating => {
     const stars = rating.querySelectorAll('.star');
-    const activeStars = Array.from(stars).filter(star => star.classList.contains('active')).length;
-    if (activeStars === 0) {
-      alert('Veuillez évaluer toutes les questions avant de soumettre.');
-      throw new Error('Unrated question found');
-    }
-    return activeStars;
+    return Array.from(stars).filter(star => star.classList.contains('active')).length;
   });
 
   const average = values.reduce((acc, val) => acc + val, 0) / values.length;
 
   const currentDate = new Date().toLocaleString();
-  customerDetails.push({
-    fullName,
-    ratings: values,
-    averageRating: average.toFixed(2),
-    submissionTime: currentDate, // Add submission time to customer details
-  });
-  
-  localStorage.setItem('customerDetails', JSON.stringify(customerDetails));
 
-  if (average >= 3.8) {
+  try {
+    // Save data to Firebase Firestore
+    await db.collection("customerDetails").add({
+      fullName,
+      ratings: values,
+      averageRating: average.toFixed(2),
+      submissionTime: currentDate,
+    });
+
+    // Display success modal
+    goodModal.style.display = "block";
+    
+    // Redirect after 2 seconds
     setTimeout(() => {
       window.location.href = 'https://fr.trustpilot.com/evaluate/vizit-demenagement.fr';
     }, 2000);
-    goodModal.style.display = "block";
-  } else {
+  } catch (error) {
+    console.error('Error saving data to Firebase:', error);
+
+    // Display error modal
+    badModal.style.display = "block";
+    
+    // Close window after 3 seconds
     setTimeout(() => {
       document.body.innerHTML = '';
       setTimeout(() => {
         window.close();
       }, 1000);
     }, 3000);
-    badModal.style.display = "block";
   }
 });
-function updateValue(spanId, value) {
-  document.getElementById(spanId).textContent = value;
-}
 
-document.getElementById('loginButton').addEventListener('click', function () {
-  const username = prompt('Enter your username:');
-  const password = prompt('Enter your password:');
-
-  // Check username and password
-  if (username === 'edenaz' && password === '318764446') {
-    // Redirect to admin page and display customer details
-    window.location.href = 'admin-page.html';
-  } else {
-    alert('Invalid credentials. Please try again.');
-  }
-});
+// ... (rest of your existing code remains the same)
