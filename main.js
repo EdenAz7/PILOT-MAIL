@@ -19,64 +19,37 @@ function rateQuestion(rating, value) {
   });
 }
 
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyDno2DbwkSYnpHJKN7WHbTQv9pGIk0bQok",
-  authDomain: "data-vizit.firebaseapp.com",
-  projectId: "data-vizit",
-  storageBucket: "data-vizit.appspot.com",
-  messagingSenderId: "340567121801",
-  appId: "1:340567121801:web:b22cc202f66f12db044b58",
-  measurementId: "G-PGW4QV6BVH"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-const app = firebase.app();  // App instance
-const analytics = firebase.analytics();  // Analytics instance
-
-
-document.getElementById('quiz-container').addEventListener('submit', async function (event) {
+document.getElementById('quiz-container').addEventListener('submit', function (event) {
   event.preventDefault();
-  const fullName = document.getElementById('fullName').value;
   const values = Array.from(ratings).map(rating => {
     const stars = rating.querySelectorAll('.star');
-    return Array.from(stars).filter(star => star.classList.contains('active')).length;
+    const activeStars = Array.from(stars).filter(star => star.classList.contains('active')).length;
+    if (activeStars === 0) {
+      alert('Veuillez évaluer toutes les questions avant de soumettre.');
+      throw new Error('Unrated question found');
+    }
+    return activeStars;
   });
 
   const average = values.reduce((acc, val) => acc + val, 0) / values.length;
 
-  const currentDate = new Date().toLocaleString();
 
-  try {
-    // Save data to Firebase Firestore
-    await db.collection("customerDetails").add({
-      fullName,
-      ratings: values,
-      averageRating: average.toFixed(2),
-      submissionTime: currentDate,
-    });
 
-    // Display success modal
-    goodModal.style.display = "block";
-    
-    // Redirect after 2 seconds
+  if (average >= 3.8) {
     setTimeout(() => {
-      window.location.href = 'https://fr.trustpilot.com/evaluate/vizit-demenagement.fr';
+      window.location.href = 'https://monavis-demenagement.com/category/demenageurs/vizit-demenagement/1173/ReviewsNewPage';
     }, 2000);
-  } catch (error) {
-    console.error('Error saving data to Firebase:', error);
-
-    // Display error modal
-    badModal.style.display = "block";
-    
-    // Close window after 3 seconds
+    goodModal.style.display = "block";
+  } else {
     setTimeout(() => {
       document.body.innerHTML = '';
       setTimeout(() => {
         window.close();
       }, 1000);
     }, 3000);
+    badModal.style.display = "block";
   }
 });
+function updateValue(spanId, value) {
+  document.getElementById(spanId).textContent = value;
+}
